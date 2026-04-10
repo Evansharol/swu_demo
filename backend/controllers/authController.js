@@ -57,22 +57,78 @@ exports.login = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please provide an email and password' });
         }
 
-        const user = await User.findOne({ email: emailNum }).select('+password');
+        let user = await User.findOne({ email: emailNum }).select('+password');
+
+        // ─── DEMO ADMIN FALLBACK ───
+        if (!user && emailNum === 'admin@stillwithyou.com' && password === 'admin123') {
+            console.log('[LOGIN] Creating demo admin user...');
+            user = await User.create({
+                name: 'System Admin',
+                email: 'admin@stillwithyou.com',
+                password: 'admin123',
+                role: 'admin',
+                identityVerified: true,
+                emailVerified: true,
+            });
+            return sendTokenResponse(user, 200, res);
+        }
+
+        // ─── DEMO USER FALLBACK ───
+        if (!user && emailNum === 'evan@gmail.com' && password === 'pass123') {
+            console.log('[LOGIN] Creating demo normal user...');
+            user = await User.create({
+                name: 'Evan Sharol',
+                email: 'evan@gmail.com',
+                password: 'pass123',
+                role: 'user',
+                identityVerified: true,
+                emailVerified: true,
+            });
+            return sendTokenResponse(user, 200, res);
+        }
+
+        // ─── DEMO SHOP FALLBACK ───
+        if (!user && emailNum === 'shop@stillwithyou.com' && password === 'shop123') {
+            console.log('[LOGIN] Creating demo shop user...');
+            user = await User.create({
+                name: 'Main Shop Partner',
+                email: 'shop@stillwithyou.com',
+                password: 'shop123',
+                role: 'shop',
+                identityVerified: true,
+                emailVerified: true,
+                shopProfile: {
+                    businessName: 'Still With You - Prime Florist',
+                    address: '123 Memorial Way, Heritage Heights',
+                    isActive: true
+                }
+            });
+            return sendTokenResponse(user, 200, res);
+        }
 
         if (!user) {
-            console.log(`[LOGIN FAILED] User not found: ${email}`);
+            console.log(`[LOGIN FAILED] No user found for: ${emailNum}`);
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         const isMatch = await user.matchPassword(password);
-        console.log(`[LOGIN MATCH] Email: ${email}, Match: ${isMatch}`);
+        console.log(`[LOGIN] Credential check for ${emailNum}: ${isMatch ? 'MATCH' : 'MISMATCH'}`);
 
         if (!isMatch) {
+            // Special case for demo admin/shop: allow if fallback credentials used
+            if (
+               (emailNum === 'admin@stillwithyou.com' && password === 'admin123') ||
+               (emailNum === 'shop@stillwithyou.com' && password === 'shop123')
+            ) {
+                console.log('[LOGIN] Demo credentials matched via override.');
+                return sendTokenResponse(user, 200, res);
+            }
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         sendTokenResponse(user, 200, res);
     } catch (error) {
+        console.error('[LOGIN ERROR]', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -83,6 +139,34 @@ exports.login = async (req, res) => {
 exports.getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// @desc    Update current user profile
+// @route   PUT /api/auth/me
+// @access  Private
+exports.updateMe = async (req, res) => {
+    try {
+        const fieldsToUpdate = {
+            name: req.body.name,
+            phone: req.body.phone,
+            selectedPackage: req.body.selectedPackage
+        };
+
+        // Remove undefined fields
+        Object.keys(fieldsToUpdate).forEach(key => fieldsToUpdate[key] === undefined && delete fieldsToUpdate[key]);
+
+        const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+            new: true,
+            runValidators: true
+        });
+
         res.status(200).json({
             success: true,
             data: user
@@ -144,7 +228,8 @@ const sendTokenResponse = (user, statusCode, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role
+            role: user.role,
+            selectedPackage: user.selectedPackage
         }
     });
 };

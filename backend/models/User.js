@@ -25,8 +25,22 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ['user', 'admin', 'shop'],
         default: 'user'
+    },
+    shopProfile: {
+        businessName: { type: String, default: '' },
+        address: { type: String, default: '' },
+        location: {
+            type: {
+                type: String,
+                enum: ['Point']
+            },
+            coordinates: {
+                type: [Number]  // [longitude, latitude]
+            }
+        },
+        isActive: { type: Boolean, default: true }
     },
     phone: {
         type: String,
@@ -78,6 +92,10 @@ const userSchema = new mongoose.Schema({
         type: [Number],  // 128-float array from face-api.js
         default: []
     },
+    selectedPackage: {
+        type: String,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -85,6 +103,9 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+// Index for hyper-local shop matching
+userSchema.index({ 'shopProfile.location': '2dsphere' });
 
 // Encrypt password using bcrypt
 userSchema.pre('save', async function(next) {

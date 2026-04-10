@@ -5,7 +5,14 @@ const Surprise = require('../models/Surprise');
 // @access  Private
 exports.getSurprises = async (req, res) => {
     try {
-        const surprises = await Surprise.find({ userId: req.user.id });
+        let query;
+        if (req.user.role === 'admin') {
+            query = {};
+        } else {
+            query = { userId: req.user.id };
+        }
+        
+        const surprises = await Surprise.find(query).populate('userId', 'name email');
         res.status(200).json({ success: true, data: surprises });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

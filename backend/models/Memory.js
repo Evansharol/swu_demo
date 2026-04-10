@@ -32,6 +32,13 @@ const memorySchema = new mongoose.Schema({
         enum: ['scheduled', 'delivered'],
         default: 'scheduled'
     },
+    recipient: {
+        name: String,
+        email: String,
+        phone: String,
+        closePersonNumber: String,
+        address: String
+    },
     createdAt: {
         type: Date,
         default: Date.now

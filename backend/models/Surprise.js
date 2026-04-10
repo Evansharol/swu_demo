@@ -14,6 +14,11 @@ const surpriseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String,
+        enum: ['flowers', 'chocolate', 'cakes', 'other'],
+        default: 'other'
+    },
     partner: {
         type: String,
         default: ''
@@ -30,6 +35,33 @@ const surpriseSchema = new mongoose.Schema({
     image: {
         type: String,
         default: ''
+    },
+    deliveryAddress: {
+        type: String,
+        default: ''
+    },
+    deliveryLocation: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number], // [longitude, latitude]
+            index: '2dsphere'
+        }
+    },
+    broadcastingTo: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    }],
+    assignedShop: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+    adminVerified: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

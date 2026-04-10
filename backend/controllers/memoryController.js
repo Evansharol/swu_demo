@@ -5,9 +5,15 @@ const Memory = require('../models/Memory');
 // @access  Private
 exports.getMemories = async (req, res) => {
     try {
+        console.log(`[DEBUG] Fetching memories for User ID: ${req.user ? req.user.id : 'undefined'}`);
+        if (!req.user) {
+            console.error('[ERROR] req.user is undefined in a protected route!');
+            return res.status(401).json({ success: false, message: 'User not found in request' });
+        }
         const memories = await Memory.find({ userId: req.user.id });
         res.status(200).json({ success: true, data: memories });
     } catch (error) {
+        console.error('[MEMORY CONTROLLER ERROR]', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -21,6 +27,7 @@ exports.createMemory = async (req, res) => {
         const memory = await Memory.create(req.body);
         res.status(201).json({ success: true, data: memory });
     } catch (error) {
+        console.error('[MEMORY CONTROLLER ERROR]', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -40,6 +47,7 @@ exports.deleteMemory = async (req, res) => {
         await memory.deleteOne();
         res.status(200).json({ success: true, data: {} });
     } catch (error) {
+        console.error('[MEMORY CONTROLLER ERROR]', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

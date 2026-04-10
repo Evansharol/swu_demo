@@ -8,13 +8,23 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
-connectDB();
+connectDB().then(() => {
+    const User = require('./models/User');
+    User.syncIndexes().then(() => {
+        console.log('✅ Geospatial indexes synchronized');
+    }).catch(err => {
+        console.error('❌ Index sync error:', err);
+    });
+});
+const mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 // Route files
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const memories = require('./routes/memories');
 const surprises = require('./routes/surprises');
+const shops = require('./routes/shops');
 
 const app = express();
 
@@ -41,14 +51,21 @@ app.use((req, res, next) => {
 // Logging middleware
 app.use(morgan('dev'));
 
+// Server Instance ID (Change on every restart)
+const SERVER_INSTANCE_ID = Date.now().toString();
+
 // Test route
-app.get('/api/test', (req, res) => res.json({ message: 'Backend is reachable' }));
+app.get('/api/test', (req, res) => res.json({ 
+    message: 'Backend is reachable', 
+    instanceId: SERVER_INSTANCE_ID 
+}));
 
 // Mount routers
 app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/api/memories', memories);
 app.use('/api/surprises', surprises);
+app.use('/api/shops', shops);
 
 const PORT = process.env.PORT || 5000;
 
