@@ -73,15 +73,6 @@ const LEAF_PARTICLES = Array.from({ length: 40 }, (_, index) => {
   };
 });
 
-const FREQ_OPTIONS = [
-  { label: 'Daily', value: 365 },
-  { label: 'Weekly', value: 52 },
-  { label: 'Monthly', value: 12 },
-  { label: 'A few times a year', value: 4 },
-  { label: 'Once a year', value: 1 },
-  { label: 'Less than once a year', value: 0 },
-];
-
 const PACKAGES = [
   {
     id: '3year',
@@ -226,7 +217,6 @@ export default function App() {
     loadModels().catch(err => console.error('Background model load failed:', err));
   }, []);
 
-  const [modalMode, setModalMode]     = useState('login');
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [userName, setUserName]       = useState('You');
   const [heroHidden, setHeroHidden]   = useState(false);
@@ -237,7 +227,6 @@ export default function App() {
   const [droplets, setDroplets]       = useState([]);
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [visitFrequency, setVisitFrequency] = useState(null);
   const [pendingName, setPendingName] = useState('');
   const [saveNotice, setSaveNotice] = useState('');
   const [heartboxPrompt, setHeartboxPrompt] = useState('');
@@ -352,9 +341,8 @@ export default function App() {
     }, 1400);
   }, []);
 
-  const openModal  = (mode) => { setModalMode(mode); setOverlayOpen(true); };
+  const openModal  = () => { setOverlayOpen(true); };
   const closeModal = () => setOverlayOpen(false);
-  const switchMode = () => setModalMode(m => m === 'login' ? 'signup' : 'login');
   const navTo      = (page) => setCurrentPage(page);
   const hasSelectedPackage = Boolean(selectedPackage);
 
@@ -523,12 +511,6 @@ export default function App() {
     }
   };
 
-  const handleSignupNext = () => {
-    const name = nameRef.current?.value.trim() || 'Friend';
-    setPendingName(name);
-    setModalMode('signup-freq');
-  };
-
   const finishLogin = (user) => {
     closeModal();
     const name = user?.name || user?.ownerName || pendingName || 'Friend';
@@ -561,23 +543,10 @@ export default function App() {
 
 
 
-  const handleLogin = () => finishLogin(nameRef.current?.value.trim() || 'Friend');
-  const handlePassKeyDown = (e) => { if (e.key === 'Enter') handleLogin(); };
-  const handleSignupComplete = () => { if (visitFrequency !== null) finishLogin(pendingName); };
-
   const waterPlant = () => {
-    if (!loggedIn) { openModal('login'); return; }
+    if (!loggedIn) { openModal(); return; }
     setHeartboxPrompt('Add another memory');
     navTo('heartbox');
-  };
-
-  const getInactivityWindow = (freq) => {
-    if (freq === 0) return 'an extended period without visiting';
-    if (freq >= 365) return '2 consecutive days without visiting';
-    if (freq >= 52)  return '2 weeks without visiting';
-    if (freq >= 12)  return '2 months without visiting';
-    if (freq >= 4)   return '6 months without visiting';
-    return '18 months without visiting';
   };
 
   const flowers = [
@@ -1112,6 +1081,91 @@ export default function App() {
                     Proceed to Payment →
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+          
+          {currentPage === 'payment' && (
+            <div className="page-overlay packages-overlay">
+              <div className="page-header">
+                <button className="back-btn" onClick={() => navTo(pendingPackage?.id === 'custom' ? 'custom-plan' : 'packages')}>← Back</button>
+                <h2 className="page-title">💳 Secure Payment</h2>
+                <div />
+              </div>
+              <div className="content-page payment-page">
+                {paymentSuccess ? (
+                  <div className="payment-success-card">
+                    <div className="psc-check-anim">
+                      <svg width="80" height="80" viewBox="0 0 80 80">
+                        <circle className="psc-circle" cx="40" cy="40" r="36" fill="none" stroke="#5aaa38" strokeWidth="4" />
+                        <polyline className="psc-check" points="23,40 35,52 57,30" fill="none" stroke="#5aaa38" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <h3>Payment Successful!</h3>
+                    <p>Your {pendingPackage?.name} is now active. You have unlocked all features of Still With You.</p>
+                    <button className="pkg-select-btn-v2" style={{background: 'linear-gradient(135deg, #1890c0, #0a5080)', marginTop: '2rem', width: 'auto', padding: '1rem 2rem'}} onClick={() => navTo('heartbox')}>
+                      Go to HeartBox →
+                    </button>
+                  </div>
+                ) : (
+                  <div className="payment-page-inner" style={{maxWidth: '500px', margin: '0 auto', width: '100%'}}>
+                    <div className="payment-order-summary">
+                      <div className="pos-icon" style={{background: pendingPackage?.bg}}>{pendingPackage?.icon}</div>
+                      <div className="pos-info">
+                        <h3>{pendingPackage?.name}</h3>
+                        <p>{pendingPackage?.duration || 'Lifetime Access'}</p>
+                      </div>
+                      <div className="pos-price">{pendingPackage?.priceLabel}</div>
+                    </div>
+
+                    <div className="payment-card-form">
+                      <h4>Card Details</h4>
+                      <div className="payment-disclaimer">🔒 Secure 256-bit SSL Encrypted Payment</div>
+                      
+                      <div className="pcf-field">
+                        <label>Cardholder Name</label>
+                        <input type="text" placeholder="John Doe" value={paymentName} onChange={e => setPaymentName(e.target.value)} />
+                      </div>
+                      
+                      <div className="pcf-field">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="•••• •••• •••• ••••" value={paymentCardNumber} onChange={e => setPaymentCardNumber(e.target.value)} />
+                      </div>
+
+                      <div className="pcf-row">
+                        <div className="pcf-field">
+                          <label>Expiry (MM/YY)</label>
+                          <input type="text" placeholder="MM/YY" value={paymentExpiry} onChange={e => setPaymentExpiry(e.target.value)} />
+                        </div>
+                        <div className="pcf-field">
+                          <label>CVV</label>
+                          <input type="password" placeholder="•••" value={paymentCvv} onChange={e => setPaymentCvv(e.target.value)} />
+                        </div>
+                      </div>
+
+                      <button 
+                        className={`payment-submit-btn${paymentProcessing ? ' processing' : ''}`} 
+                        onClick={processPayment} 
+                        disabled={paymentProcessing}
+                      >
+                        {paymentProcessing ? (
+                          <>
+                            <span className="spinner"></span>
+                            Processing...
+                          </>
+                        ) : (
+                          `Pay ${pendingPackage?.priceLabel} Now`
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="payment-secure-badges">
+                      <span>✓ Secure Payment</span>
+                      <span>✓ Money Back Guarantee</span>
+                      <span>✓ 24/7 Support</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -32,6 +32,10 @@ const memorySchema = new mongoose.Schema({
         enum: ['scheduled', 'delivered'],
         default: 'scheduled'
     },
+    reminderSent: {
+        type: Boolean,
+        default: false
+    },
     recipient: {
         name: String,
         email: String,

@@ -1,9 +1,40 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 
+// ── Always-visible demo requests (shown alongside real broadcasts) ──
+const DEMO_REQUESTS = [
+  {
+    _id: 'demo_001',
+    recipientName: 'Priya Sharma',
+    giftType: 'Red Rose Bouquet',
+    deliveryAddress: '42, Rose Garden Street, Saibaba Colony, Coimbatore - 641011',
+    scheduledDate: new Date(Date.now() + 86400000).toISOString(), // tomorrow
+    category: 'flowers',
+    isDemo: true,
+  },
+  {
+    _id: 'demo_002',
+    recipientName: 'Anil Kumar',
+    giftType: 'Peace Lily Arrangement',
+    deliveryAddress: '12, Lotus Nagar, RS Puram, Coimbatore - 641002',
+    scheduledDate: new Date(Date.now() + 2 * 86400000).toISOString(), // day after tomorrow
+    category: 'flowers',
+    isDemo: true,
+  },
+  {
+    _id: 'demo_003',
+    recipientName: 'Meera Rajesh',
+    giftType: 'Birthday Sunflower Basket',
+    deliveryAddress: '7, Sunshine Avenue, Peelamedu, Coimbatore - 641004',
+    scheduledDate: new Date(Date.now() + 3 * 86400000).toISOString(),
+    category: 'flowers',
+    isDemo: true,
+  },
+];
+
 export default function ShopDashboard({ onLogout }) {
   const { currentUser, logout } = useAuth();
-  const [incomingOrders, setIncomingOrders] = useState([]);
+  const [incomingOrders, setIncomingOrders] = useState(DEMO_REQUESTS);
   const [activeOrders, setActiveOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('fulfillment'); // 'fulfillment' | 'products' | 'profile'
@@ -47,24 +78,39 @@ export default function ShopDashboard({ onLogout }) {
   const fetchShopData = useCallback(async () => {
     const token = localStorage.getItem('token');
     try {
-      // 1. Fetch broadcasted orders
+      // 1. Fetch broadcasted orders from backend
       const bRes = await fetch(`${API_URL}/shops/my-broadcasting`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const bData = await bRes.json();
-      if (bData.success) setIncomingOrders(bData.data);
+      
+      // Merge: real orders first, then demo orders (filter out demos that have the same ID as real)
+      if (bData.success && bData.data.length > 0) {
+        // Show real orders + keep demo orders that haven't been matched
+        const realIds = bData.data.map(o => o._id);
+        const filteredDemos = DEMO_REQUESTS.filter(d => !realIds.includes(d._id));
+        setIncomingOrders([...bData.data, ...filteredDemos]);
+      } else {
+        // Backend returned nothing — show demo data
+        setIncomingOrders(DEMO_REQUESTS);
+      }
 
-      // 2. Fetch already accepted/active orders (we'll reuse the surprises endpoint which returns user-specific records)
+      // 2. Fetch already accepted/active orders
       const aRes = await fetch(`${API_URL}/surprises`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const aData = await aRes.json();
       if (aData.success) {
-        // Filter for orders where assignedShop is this shop
-        setActiveOrders(aData.data.filter(o => o.assignedShop === currentUser.id || o.assignedShop === currentUser._id));
+        setActiveOrders(aData.data.filter(o => 
+          o.assignedShop === currentUser?.id || 
+          o.assignedShop === currentUser?._id ||
+          (typeof o.assignedShop === 'object' && o.assignedShop?._id === currentUser?.id)
+        ));
       }
     } catch (err) {
-      console.error('Failed to fetch shop data', err);
+      console.error('Failed to fetch shop data — showing demo data', err);
+      // On any error, fall back to demo data so the UI isn't empty
+      setIncomingOrders(DEMO_REQUESTS);
     } finally {
       setLoading(false);
     }
@@ -78,6 +124,16 @@ export default function ShopDashboard({ onLogout }) {
   }, [fetchShopData]);
 
   const handleAcceptOrder = async (orderId) => {
+    // Handle demo orders locally without API call
+    if (String(orderId).startsWith('demo_')) {
+      const order = incomingOrders.find(o => o._id === orderId);
+      if (order) {
+        setIncomingOrders(prev => prev.filter(o => o._id !== orderId));
+        setActiveOrders(prev => [...prev, { ...order, status: 'ordered', isDemo: true }]);
+        showToast('✅ Order Accepted! Prepare for delivery.');
+      }
+      return;
+    }
     const token = localStorage.getItem('token');
     try {
       const res = await fetch(`${API_URL}/shops/accept/${orderId}`, {
@@ -86,13 +142,36 @@ export default function ShopDashboard({ onLogout }) {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Order Accepted! Prepare for delivery.');
+        showToast('✅ Order Accepted! Prepare for delivery.');
         fetchShopData();
       } else {
         showToast(data.message || 'Failed to accept order.');
       }
     } catch (err) {
       showToast('Server error. Try again.');
+    }
+  };
+
+  const handleDeclineOrder = async (orderId) => {
+    // Handle demo orders locally
+    if (String(orderId).startsWith('demo_')) {
+      setIncomingOrders(prev => prev.filter(o => o._id !== orderId));
+      showToast('Request Declined.');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_URL}/shops/decline/${orderId}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Request Declined.');
+        fetchShopData();
+      }
+    } catch (err) {
+      showToast('Error declining order.');
     }
   };
 
@@ -150,7 +229,7 @@ export default function ShopDashboard({ onLogout }) {
         <div className="nav-user-area">
           <div className="user-badge" onClick={() => setActiveTab('profile')} style={{cursor:'pointer'}}>
             <div className="live-dot" />
-            <span>{currentUser?.shopProfile?.businessName || 'Partner Shop'}</span>
+            <span>{currentUser?.shopProfile?.businessName || currentUser?.name || 'Floral Aura'}</span>
           </div>
           <button className="btn-logout" onClick={onLogout || logout}>Logout</button>
         </div>
@@ -188,7 +267,15 @@ export default function ShopDashboard({ onLogout }) {
 
               <div className="fulfillment-grid">
                 <section className="fulfillment-column">
-                  <h2>🔥 Incoming Requests ({incomingOrders.length})</h2>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1rem'}}>
+                    <h2>🔥 Incoming Requests ({incomingOrders.length})</h2>
+                    <button 
+                      onClick={fetchShopData} 
+                      style={{background:'#f0f7ed', border:'1px solid #5aaa38', borderRadius:'10px', padding:'0.4rem 1rem', cursor:'pointer', fontSize:'0.82rem', fontWeight:'700', color:'#2a5220'}}
+                    >
+                      ↻ Refresh
+                    </button>
+                  </div>
                   <div className="orders-container">
                     {incomingOrders.length === 0 ? (
                       <div className="empty-box">
@@ -204,15 +291,23 @@ export default function ShopDashboard({ onLogout }) {
                           </div>
                           <div className="order-recipient">
                             <strong>{order.recipientName}</strong>
-                            <span>Dilevery for {order.giftType}</span>
+                            <span style={{color: '#c07820', fontWeight: 'bold'}}>Gift: {order.giftType}</span>
+                            <span className="order-address" style={{fontSize: '0.8rem', color: '#666', marginTop: '4px', display: 'block'}}>
+                               🏠 {order.deliveryAddress}
+                            </span>
                           </div>
                           <div className="order-details-pills">
                             <div className="detail-pill">🚀 Fast Token</div>
-                            <div className="detail-pill">🎁 Gift</div>
+                            <div className="detail-pill">🎁 Legacy Box</div>
                           </div>
-                          <button className="btn-accept" onClick={() => handleAcceptOrder(order._id)}>
-                            Accept Delivery Request
-                          </button>
+                          <div style={{display: 'flex', gap: '8px', marginTop: '1rem'}}>
+                              <button className="btn-logout" style={{flex: 1, padding: '0.8rem', background: '#f5f5f5', color: '#666', border: '1px solid #ddd'}} onClick={() => handleDeclineOrder(order._id)}>
+                                Decline
+                              </button>
+                              <button className="btn-accept" style={{flex: 2}} onClick={() => handleAcceptOrder(order._id)}>
+                                Accept Request
+                              </button>
+                          </div>
                         </div>
                       ))
                     )}
@@ -297,9 +392,9 @@ export default function ShopDashboard({ onLogout }) {
               <div style={{ maxWidth: '600px', marginTop: '2rem' }}>
                 <div className="order-card-premium">
                    <div style={{ display: 'grid', gap: '1.2rem' }}>
-                      <div className="order-recipient"><strong>Business Name</strong><span>{currentUser?.shopProfile?.businessName}</span></div>
+                      <div className="order-recipient"><strong>Business Name</strong><span>{currentUser?.shopProfile?.businessName || currentUser?.name}</span></div>
                       <div className="order-recipient"><strong>Address</strong><span>{currentUser?.shopProfile?.address}</span></div>
-                      <div className="order-recipient"><strong>Service Category</strong><span className="stock-badge in-stock">{currentUser?.shopProfile?.category || 'General'}</span></div>
+                      <div className="order-recipient"><strong>Service Category</strong><span className="stock-badge in-stock">{currentUser?.shopProfile?.businessType || 'Flowers'}</span></div>
                       <div className="detail-pill" style={{ textAlign: 'center', background: '#f0f9e8', padding: '1rem' }}>
                         🛡️ SWU Verified Partner
                       </div>

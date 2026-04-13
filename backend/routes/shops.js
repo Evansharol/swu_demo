@@ -3,7 +3,8 @@ const {
     findClosestShops, 
     broadcastToShops, 
     getBroadcastedOrders, 
-    acceptOrder 
+    acceptOrder,
+    declineOrder
 } = require('../controllers/shopController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -18,5 +19,6 @@ router.post('/broadcast', authorize('admin'), broadcastToShops);
 // Shop Routes
 router.get('/my-broadcasting', authorize('shop'), getBroadcastedOrders);
 router.put('/accept/:id', authorize('shop'), acceptOrder);
+router.put('/decline/:id', authorize('shop'), declineOrder);
 
 module.exports = router;

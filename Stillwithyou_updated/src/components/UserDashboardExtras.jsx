@@ -22,7 +22,7 @@ export default function UserDashboardExtras({ onNavigate }) {
     { id: 'memories', label: 'My Memories', icon: '💭', count: memories.length },
     { id: 'surprises', label: 'Scheduled Surprises', icon: '🎁', count: surprises.length },
     { id: 'orders', label: 'Orders & Tracking', icon: '📦', count: userOrders.length },
-    { id: 'safety', label: 'Safety System', icon: '🛡️', count: 1 },
+    { id: 'reminders', label: 'Upcoming Reminders', icon: '🔔', count: memories.filter(m => m.status === 'scheduled').length },
   ];
 
   const getStatusColor = (status) => {
@@ -180,79 +180,54 @@ export default function UserDashboardExtras({ onNavigate }) {
         </div>
       )}
 
-      {/* ── SAFETY SYSTEM ── */}
-      {activeSection === 'safety' && (
+      {/* ── UPCOMING REMINDERS ── */}
+      {activeSection === 'reminders' && (
         <div className="user-extras-section">
           <div className="content-hero content-hero-safe" style={{ marginBottom: '1rem' }}>
-            <h3>🛡️ Memory Safety System</h3>
-            <p>Your legacy is protected by our automated inactivity monitoring and verification pipeline.</p>
+            <h3>🔔 Unbreakable Schedule</h3>
+            <p>Once a memory is planted in your garden, it blooms on time—no matter what.</p>
           </div>
 
           <div className="safety-view-grid">
             <div className="safety-card safety-status-card">
-              <h4>Current Status</h4>
+              <h4>Garden Status</h4>
               <div className="safety-status-badge ACTIVE">
                 <span className="pulse-dot"></span>
-                Monitoring Active
+                Schedule Active
               </div>
-              <p className="safety-stat-detail">Last check: <span>Just now</span></p>
-              <p className="safety-stat-detail">Last visit: <span>{new Date(currentUser?.lastVisit || Date.now()).toLocaleDateString()}</span></p>
+              <p className="safety-stat-detail">Upcoming Surprises: <span>{memories.filter(m => m.status === 'scheduled').length}</span></p>
+              <p className="safety-stat-detail">Next Bloom: <span>{memories.find(m => m.status === 'scheduled')?.date || 'None scheduled'}</span></p>
             </div>
 
             <div className="safety-card safety-config-card">
-              <h4>Monitoring Logic</h4>
+              <h4>Legacy Wallet</h4>
               <div className="safety-config-item">
-                <span className="cfg-label">Inactivity Window:</span>
-                <span className="cfg-value">2 months</span>
+                <span className="cfg-label">Current Balance:</span>
+                <span className="cfg-value" style={{ color: '#6b8e23', fontWeight: 'bold' }}>$0.00</span>
               </div>
               <div className="safety-config-item">
-                <span className="cfg-label">Detection Method:</span>
-                <span className="cfg-value">Login & Activity Tracking</span>
+                <span className="cfg-label">Funding Status:</span>
+                <span className="cfg-value">Active</span>
               </div>
-              <div className="safety-config-item">
-                <span className="cfg-label">Emergency Contact:</span>
-                <span className="cfg-value">{currentUser?.emergencyContact?.name || 'Vandana'} ({currentUser?.emergencyContact?.relation || 'Family'})</span>
-              </div>
+              <button className="btn-go" style={{ padding: '0.4rem 1rem', marginTop: '0.5rem', fontSize: '0.8rem' }}>
+                Top Up Wallet
+              </button>
             </div>
           </div>
 
-          <div className="safety-pipeline-visual">
-            <h4>Verification Pipeline</h4>
-            <p className="pipeline-desc">If inactivity is detected, we follow this sequence before delivering any memories.</p>
-            
-            <div className="pipeline-timeline">
-              <div className="pipeline-event active">
-                <div className="event-icon">📧</div>
-                <div className="event-info">
-                  <strong>Email Check</strong>
-                  <span>Sent 2 months after inactivity</span>
+          <div className="upcoming-reminders-list">
+            <h4>📅 Tomorrow's Reminders</h4>
+            {memories.filter(m => m.status === 'scheduled').length === 0 ? (
+              <p className="empty-reminders">No reminders for tomorrow. Rest easy!</p>
+            ) : (
+              <div className="reminder-item-dashboard">
+                <div className="reminder-icon">🌸</div>
+                <div className="reminder-content">
+                  <strong>Birthday Surprise for {memories[0]?.recipient?.name || 'Loved One'}</strong>
+                  <span>Tomorrow is their special day. We'll send your message at 8:00 AM.</span>
                 </div>
               </div>
-              <div className="pipeline-connector"></div>
-              <div className="pipeline-event">
-                <div className="event-icon">💬</div>
-                <div className="event-info">
-                  <strong>WhatsApp Ping</strong>
-                  <span>3 days after no email response</span>
-                </div>
-              </div>
-              <div className="pipeline-connector"></div>
-              <div className="pipeline-event">
-                <div className="event-icon">🤖</div>
-                <div className="event-info">
-                  <strong>AI Voice Call</strong>
-                  <span>5 days after no WhatsApp response</span>
-                </div>
-              </div>
-              <div className="pipeline-connector"></div>
-              <div className="pipeline-event delivery">
-                <div className="event-icon">📦</div>
-                <div className="event-info">
-                  <strong>Memory Delivery</strong>
-                  <span>Triggered only if all checks fail</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}

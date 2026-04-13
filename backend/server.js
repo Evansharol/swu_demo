@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const initScheduler = require('./utils/scheduler');
 
 // Load env vars
 dotenv.config();
@@ -71,6 +72,9 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    
+    // Initialize Scheduler
+    initScheduler();
 });
 
 // 404 Handler

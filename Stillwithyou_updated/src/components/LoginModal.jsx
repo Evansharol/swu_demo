@@ -3,15 +3,6 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import FaceVerifyModal from './FaceVerifyModal.jsx';
 
-const FREQ_OPTIONS = [
-  { label: 'Daily', value: 365 },
-  { label: 'Weekly', value: 52 },
-  { label: 'Monthly', value: 12 },
-  { label: 'A few times a year', value: 4 },
-  { label: 'Once a year', value: 1 },
-  { label: 'Less than once a year', value: 0 },
-];
-
 const REASON_OPTIONS = [
   'Remembering a loved one who passed away',
   'Preserving memories for future generations',
@@ -30,7 +21,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
 
   const [mode, setMode] = useState('login');
   const [role, setRole] = useState('user');
-  const [visitFrequency, setVisitFrequency] = useState(null);
   const [pendingName, setPendingName] = useState('');
   const [error, setError] = useState('');
 
@@ -74,11 +64,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [securityAnswer, setSecurityAnswer] = useState('');
   const [idVerified, setIdVerified] = useState(false);
 
-  // Emergency contact (for delivery pipeline)
-  const [emergencyName, setEmergencyName] = useState('');
-  const [emergencyPhone, setEmergencyPhone] = useState('');
-  const [emergencyRelation, setEmergencyRelation] = useState('');
-
   // store email/password across steps
   const [savedEmail, setSavedEmail] = useState('');
   const [savedPass, setSavedPass] = useState('');
@@ -89,25 +74,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     const t = setTimeout(() => setOtpCountdown(c => c - 1), 1000);
     return () => clearTimeout(t);
   }, [otpCountdown]);
-
-  const getInactivityWindow = (freq) => {
-    if (freq === 0) return 'an extended period without visiting';
-    if (freq >= 365) return '2 consecutive days without visiting';
-    if (freq >= 52) return '2 weeks without visiting';
-    if (freq >= 12) return '2 months without visiting';
-    if (freq >= 4) return '6 months without visiting';
-    return '18 months without visiting';
-  };
-
-  const getDeliverySteps = (freq) => {
-    const window = getInactivityWindow(freq);
-    return [
-      { icon: '📧', label: 'Email Reminder', desc: `Sent after ${window}` },
-      { icon: '💬', label: 'WhatsApp Message', desc: 'Sent 3 days after email' },
-      { icon: '🤖', label: 'AI Voice Call', desc: 'Made 5 days after WhatsApp' },
-      { icon: '📦', label: 'Content Delivered', desc: 'Only if no response to all attempts' },
-    ];
-  };
 
   // -- LOGIN: Step 1 - Verify credentials --
   const handleLogin = async () => {
@@ -243,11 +209,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
 
   // -- SIGNUP: Step 4 -> After reason, go to identity --
   const handleReasonNext = () => {
-    if (!customReason.trim()) {
-      setError('Please describe your purpose.'); return;
-    }
-    if (!emergencyName.trim() || !emergencyPhone.trim() || !emergencyRelation.trim()) {
-      setError('Please fill in emergency contact details. This is required for the delivery pipeline.'); return;
+    if (!selectedReason && !customReason.trim()) {
+      setError('Please select a reason or describe your purpose.'); return;
     }
     setError('');
     setMode('signup-identity');
@@ -274,12 +237,11 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     setError('');
     setIdVerified(true);
     setIdentityStep('verified');
-    setTimeout(() => setMode('signup-freq'), 800);
+    setTimeout(() => handleSignupComplete(), 800);
   };
 
   // -- SIGNUP: Final step -> Complete --
   const handleSignupComplete = async () => {
-    if (visitFrequency === null) return;
     const result = await signup({
       name: pendingName,
       email: savedEmail,
@@ -288,12 +250,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       phone: userPhone,
       whatsApp: userWhatsApp || userPhone,
       reason: customReason,
-      visitFrequency,
-      emergencyContact: {
-        name: emergencyName,
-        phone: emergencyPhone,
-        relation: emergencyRelation,
-      },
       identityVerified: idVerified,
       faceDescriptor: signupFaceDescriptor,
       emailVerified: emailOtpVerified,
@@ -334,10 +290,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     setSelfieStatus('idle');
     setIdVerified(false);
     setSecurityAnswer('');
-    setEmergencyName('');
-    setEmergencyPhone('');
-    setEmergencyRelation('');
-    setVisitFrequency(null);
   };
 
   useEffect(() => {
@@ -352,7 +304,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     { id: 'signup-verify-choice', label: 'Verify' },
     { id: 'signup-reason', label: 'Purpose' },
     { id: 'signup-identity', label: 'Identity' },
-    { id: 'signup-freq', label: 'Frequency' },
   ];
   const currentStepIdx = userSteps.findIndex(s => {
     if (s.id === mode) return true;
@@ -614,20 +565,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
               />
             </div>
 
-            <div className="emergency-section">
-              <h4 className="emergency-title">
-                🚨 Emergency Contact
-              </h4>
-              <p className="emergency-desc">
-                This person will be contacted as part of the delivery verification pipeline before any content is delivered.
-              </p>
-              <div className="emergency-grid">
-                <input type="text" placeholder="Contact person's name" value={emergencyName} onChange={e => setEmergencyName(e.target.value)} />
-                <input type="tel" placeholder="Contact phone number" value={emergencyPhone} onChange={e => setEmergencyPhone(e.target.value)} />
-                <input type="text" placeholder="Relationship (e.g. Spouse, Sibling)" value={emergencyRelation} onChange={e => setEmergencyRelation(e.target.value)} />
-              </div>
-            </div>
-
             <button className="btn-go" onClick={handleReasonNext}>Continue →</button>
           </>
         )}
@@ -682,71 +619,9 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
               <div className="id-verified-card">
                 <div className="id-verified-icon">🛡️</div>
                 <h3>Identity Verified</h3>
-                <p>Your account is now verified as a real person. This ensures the integrity and respectfulness of all memorials on our platform.</p>
+                <p>Your account is now verified. We are finalizing your profile...</p>
               </div>
             )}
-          </>
-        )}
-
-        {/* === SIGNUP: Step 6 - Visit Frequency & Delivery Pipeline === */}
-        {mode === 'signup-freq' && (
-          <>
-            <h2>📅 Visit Frequency</h2>
-            <p className="sub">
-              How often do you plan to visit this memorial?
-              <br />
-              <span style={{ fontSize: '.72rem', color: '#a0b090', display: 'block', marginTop: '.3rem' }}>
-                This determines when we start checking on you before delivering content.
-              </span>
-            </p>
-            <div className="freq-grid">
-              {FREQ_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  className={`freq-btn${visitFrequency === opt.value ? ' selected' : ''}`}
-                  onClick={() => setVisitFrequency(opt.value)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-
-            {visitFrequency !== null && (
-              <>
-                <div className="delivery-pipeline-card">
-                  <h4>📦 Delivery Pipeline</h4>
-                  <p className="dp-desc">
-                    Your saved memories will <strong>only</strong> be delivered after all contact attempts fail:
-                  </p>
-                  <div className="dp-steps">
-                    {getDeliverySteps(visitFrequency).map((step, i) => (
-                      <div key={i} className="dp-step">
-                        <div className="dp-step-line">
-                          <div className={`dp-step-dot${i === 3 ? ' final' : ''}`}>{step.icon}</div>
-                          {i < 3 && <div className="dp-step-connector" />}
-                        </div>
-                        <div className="dp-step-info">
-                          <strong>{step.label}</strong>
-                          <span>{step.desc}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="freq-note">
-                  ✓ Notifications start after <strong>{getInactivityWindow(visitFrequency)}</strong>. Content is delivered <strong>only if you don't respond</strong> to email, WhatsApp, and AI call.
-                </p>
-              </>
-            )}
-
-            <button
-              className="btn-go"
-              style={{ opacity: visitFrequency !== null ? 1 : 0.4, cursor: visitFrequency !== null ? 'pointer' : 'not-allowed' }}
-              onClick={handleSignupComplete}
-            >
-              🎉 Create Account
-            </button>
           </>
         )}
       </div>

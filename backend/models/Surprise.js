@@ -23,6 +23,10 @@ const surpriseSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    occasion: {
+        type: String,
+        default: 'Birthday'
+    },
     scheduledDate: {
         type: String,
         required: true
@@ -31,6 +35,10 @@ const surpriseSchema = new mongoose.Schema({
         type: String,
         enum: ['upcoming', 'ordered', 'shipped', 'delivered'],
         default: 'upcoming'
+    },
+    reminderSent: {
+        type: Boolean,
+        default: false
     },
     image: {
         type: String,

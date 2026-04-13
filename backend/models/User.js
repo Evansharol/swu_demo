@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema({
     shopProfile: {
         businessName: { type: String, default: '' },
         address: { type: String, default: '' },
+        businessType: { type: String, default: 'flowers' },
         location: {
             type: {
                 type: String,
@@ -54,37 +55,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    visitFrequency: {
-        type: Number,
-        default: null
-    },
-    emergencyContact: {
-        name: String,
-        phone: String,
-        relation: String
-    },
-    identityVerified: {
-        type: Boolean,
-        default: false
-    },
-    emailVerified: {
-        type: Boolean,
-        default: false
-    },
-    phoneVerified: {
-        type: Boolean,
-        default: false
-    },
-    lastVisit: {
-        type: Date,
-        default: Date.now
-    },
-    deliveryStatus: {
-        type: String,
-        enum: ['active', 'monitoring', 'notifying', 'delivered'],
-        default: 'active'
-    },
-    notificationStage: {
+    walletBalance: {
         type: Number,
         default: 0
     },

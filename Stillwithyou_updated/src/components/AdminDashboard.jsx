@@ -216,20 +216,36 @@ export default function AdminDashboard({ onLogout }) {
 
   const executeBroadcast = async () => {
     const token = localStorage.getItem('token');
+    
+    // Collect real names from DUMMY_SHOPS for any dummy IDs (the backend will resolve them)
+    const shopNames = selectedShopIds.map(id => {
+      const dummy = DUMMY_SHOPS.find(d => d.id.toString() === id.toString());
+      if (dummy) return dummy.name;
+      const real = allUsers.find(u => u._id.toString() === id.toString());
+      return real?.shopProfile?.businessName || real?.name || null;
+    }).filter(Boolean);
+    
     try {
       const res = await fetch('http://127.0.0.1:5000/api/shops/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ surpriseId: selectedSurprise._id, shopIds: selectedShopIds }),
+        body: JSON.stringify({ 
+          surpriseId: selectedSurprise._id, 
+          shopIds: selectedShopIds,
+          shopNames  // send names as fallback for dummy IDs
+        }),
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Broadcast sent!');
+        showToast(`✅ Broadcast sent to ${data.shopCount || 1} partner(s)!`);
         setSelectedSurprise(null);
         setViewMode('list');
         setShowConfirm(false);
+      } else {
+        showToast(`❌ ${data.message || 'Broadcast failed. Check server logs.'}`);
+        setShowConfirm(false);
       }
-    } catch { showToast('Error sending broadcast.'); }
+    } catch { showToast('❌ Network error sending broadcast.'); }
   };
 
   const deliveryTarget = selectedSurprise?.deliveryLocation

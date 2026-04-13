@@ -42,7 +42,7 @@ const seedData = async () => {
             { name: 'Bloom Boutique', email: 's4@swu.com', shopProfile: { businessName: 'Bloom Boutique', address: 'Saibaba Colony', location: {type:'Point', coordinates:[76.942, 11.034]}, businessType: 'flowers'} },
             { name: 'Cocoa Bean', email: 's5@swu.com', shopProfile: { businessName: 'Cocoa Bean', address: 'Gandhipuram', location: {type:'Point', coordinates:[76.969, 11.018]}, businessType: 'chocolate'} },
             { name: 'Sugar Rush', email: 's6@swu.com', shopProfile: { businessName: 'Sugar Rush Cakes', address: 'Peelamedu', location: {type:'Point', coordinates:[77.012, 11.026]}, businessType: 'cakes'} },
-            { name: 'Floral Aura', email: 's7@swu.com', shopProfile: { businessName: 'Floral Aura', address: 'Town Hall', location: {type:'Point', coordinates:[76.966, 11.011]}, businessType: 'flowers'} },
+            { name: 'Floral Aura', email: 'shop@stillwithyou.com', shopProfile: { businessName: 'Floral Aura', address: 'Town Hall', location: {type:'Point', coordinates:[76.966, 11.011]}, businessType: 'flowers'} },
             { name: 'Choco Bliss', email: 's8@swu.com', shopProfile: { businessName: 'Choco Bliss', address: 'Vadavalli', location: {type:'Point', coordinates:[76.899, 11.022]}, businessType: 'chocolate'} },
             { name: 'Dream Florals', email: 's9@swu.com', shopProfile: { businessName: 'Dream Florals', address: 'Ganapathy', location: {type:'Point', coordinates:[76.985, 11.041]}, businessType: 'flowers'} },
             { name: 'The Cake Lab', email: 's10@swu.com', shopProfile: { businessName: 'The Cake Lab', address: 'Saravanampatti', location: {type:'Point', coordinates:[77.025, 11.077]}, businessType: 'cakes'} },

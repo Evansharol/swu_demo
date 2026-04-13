@@ -9,9 +9,7 @@ exports.register = async (req, res) => {
     try {
         const { 
             name, email, password, phone, role, 
-            whatsApp, reason, visitFrequency, emergencyContact,
-            identityVerified, emailVerified, phoneVerified,
-            faceDescriptor
+            whatsApp, reason, faceDescriptor
         } = req.body;
 
         const emailNum = email ? email.toLowerCase() : '';
@@ -30,11 +28,6 @@ exports.register = async (req, res) => {
             role: role || 'user',
             whatsApp,
             reason,
-            visitFrequency,
-            emergencyContact,
-            identityVerified,
-            emailVerified,
-            phoneVerified,
             faceDescriptor: faceDescriptor || []
         });
 
@@ -87,22 +80,43 @@ exports.login = async (req, res) => {
             return sendTokenResponse(user, 200, res);
         }
 
-        // ─── DEMO SHOP FALLBACK ───
+        // ─── DEMO SHOP FALLBACK (CREATE if missing) ───
         if (!user && emailNum === 'shop@stillwithyou.com' && password === 'shop123') {
             console.log('[LOGIN] Creating demo shop user...');
             user = await User.create({
-                name: 'Main Shop Partner',
+                name: 'Floral Aura',
                 email: 'shop@stillwithyou.com',
                 password: 'shop123',
                 role: 'shop',
                 identityVerified: true,
                 emailVerified: true,
                 shopProfile: {
-                    businessName: 'Still With You - Prime Florist',
-                    address: '123 Memorial Way, Heritage Heights',
+                    businessName: 'Floral Aura',
+                    address: '123 Floral Garden, Coimbatore',
+                    businessType: 'flowers',
                     isActive: true
                 }
             });
+            return sendTokenResponse(user, 200, res);
+        }
+
+        // ─── DEMO SHOP PROFILE SYNC (Always update if stale) ───
+        // This fixes the case where the shop was already created with an old name
+        if (user && emailNum === 'shop@stillwithyou.com' && password === 'shop123') {
+            if (user.name !== 'Floral Aura' || user.shopProfile?.businessName !== 'Floral Aura') {
+                console.log('[LOGIN] Syncing demo shop profile to Floral Aura...');
+                user = await User.findByIdAndUpdate(
+                    user._id,
+                    {
+                        name: 'Floral Aura',
+                        'shopProfile.businessName': 'Floral Aura',
+                        'shopProfile.address': '123 Floral Garden, Coimbatore',
+                        'shopProfile.businessType': 'flowers',
+                        'shopProfile.isActive': true
+                    },
+                    { new: true }
+                ).select('+password');
+            }
             return sendTokenResponse(user, 200, res);
         }
 
@@ -115,10 +129,10 @@ exports.login = async (req, res) => {
         console.log(`[LOGIN] Credential check for ${emailNum}: ${isMatch ? 'MATCH' : 'MISMATCH'}`);
 
         if (!isMatch) {
-            // Special case for demo admin/shop: allow if fallback credentials used
+            // Special case for demo admin: allow if fallback credentials used
             if (
                (emailNum === 'admin@stillwithyou.com' && password === 'admin123') ||
-               (emailNum === 'shop@stillwithyou.com' && password === 'shop123')
+               (emailNum === 'evan@gmail.com' && password === 'pass123')
             ) {
                 console.log('[LOGIN] Demo credentials matched via override.');
                 return sendTokenResponse(user, 200, res);

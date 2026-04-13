@@ -8,6 +8,9 @@ exports.getSurprises = async (req, res) => {
         let query;
         if (req.user.role === 'admin') {
             query = {};
+        } else if (req.user.role === 'shop') {
+            // Find orders specifically assigned to this shop
+            query = { assignedShop: req.user.id };
         } else {
             query = { userId: req.user.id };
         }
