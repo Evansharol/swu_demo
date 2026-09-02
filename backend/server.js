@@ -70,8 +70,9 @@ app.use('/api/shops', shops);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log('Server address info:', server.address());
     
     // Initialize Scheduler
     initScheduler();

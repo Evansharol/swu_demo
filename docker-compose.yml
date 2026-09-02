@@ -1,0 +1,51 @@
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:7.0
+    container_name: stillwithyou-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+  # Node.js Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stillwithyou-backend
+    restart: unless-stopped
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/stillwithyou
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET:-your_super_secret_key_123}
+      - EMAIL_USER=${EMAIL_USER:-evanzzsharol@gmail.com}
+      - EMAIL_PASS=${EMAIL_PASS:-nbjo rire apda pypt}
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  # Nginx Frontend + Reverse Proxy
+  frontend:
+    build:
+      context: ./Stillwithyou_updated
+      dockerfile: Dockerfile
+    container_name: stillwithyou-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

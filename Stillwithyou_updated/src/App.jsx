@@ -11,47 +11,47 @@ import handImage from './images/hand.png';
 import ShopDashboard from './components/ShopDashboard.jsx';
 
 const GRASS_DARK = [
-  "M0,92 Q5,52 10,92Z","M16,92 Q22,44 28,92Z","M34,92 Q39,56 44,92Z",
-  "M50,92 Q56,46 62,92Z","M68,92 Q73,54 78,92Z","M84,92 Q90,44 96,92Z",
-  "M102,92 Q107,54 112,92Z","M118,92 Q124,46 130,92Z","M136,92 Q142,52 147,92Z",
-  "M153,92 Q158,44 164,92Z","M170,92 Q176,54 181,92Z","M187,92 Q193,46 199,92Z",
-  "M205,92 Q210,54 215,92Z","M221,92 Q227,44 233,92Z","M239,92 Q244,54 249,92Z",
-  "M255,92 Q261,46 267,92Z","M273,92 Q278,54 283,92Z","M289,92 Q295,44 301,92Z",
-  "M307,92 Q312,54 317,92Z","M323,92 Q329,46 335,92Z","M341,92 Q346,52 351,92Z",
-  "M357,92 Q363,44 369,92Z","M375,92 Q380,54 385,92Z","M391,92 Q397,46 403,92Z",
-  "M409,92 Q414,54 419,92Z","M425,92 Q431,44 437,92Z","M443,92 Q448,54 453,92Z",
-  "M459,92 Q465,46 471,92Z","M477,92 Q482,52 487,92Z","M493,92 Q499,44 505,92Z",
-  "M511,92 Q516,54 521,92Z","M527,92 Q533,46 539,92Z","M545,92 Q550,54 555,92Z",
-  "M561,92 Q567,44 573,92Z","M579,92 Q584,54 589,92Z","M595,92 Q601,46 607,92Z",
-  "M613,92 Q618,52 623,92Z","M629,92 Q635,44 641,92Z","M647,92 Q652,54 657,92Z",
-  "M663,92 Q669,46 675,92Z","M681,92 Q686,54 691,92Z","M697,92 Q703,44 709,92Z",
-  "M715,92 Q720,54 725,92Z","M731,92 Q737,46 743,92Z","M749,92 Q754,52 759,92Z",
-  "M765,92 Q771,44 777,92Z","M783,92 Q788,54 793,92Z","M799,92 Q805,46 811,92Z",
-  "M817,92 Q822,54 827,92Z","M833,92 Q839,44 845,92Z","M851,92 Q856,54 861,92Z",
-  "M867,92 Q873,46 879,92Z","M885,92 Q890,52 895,92Z","M901,92 Q907,44 913,92Z",
-  "M919,92 Q924,54 929,92Z","M935,92 Q941,46 947,92Z","M953,92 Q958,54 963,92Z",
-  "M969,92 Q975,44 981,92Z","M987,92 Q992,54 997,92Z","M1003,92 Q1009,46 1015,92Z",
-  "M1021,92 Q1026,52 1031,92Z","M1037,92 Q1043,44 1049,92Z","M1055,92 Q1060,54 1065,92Z",
-  "M1071,92 Q1077,46 1083,92Z","M1089,92 Q1094,54 1099,92Z","M1105,92 Q1111,44 1117,92Z",
-  "M1123,92 Q1128,54 1133,92Z","M1139,92 Q1145,46 1151,92Z","M1157,92 Q1162,52 1167,92Z",
-  "M1173,92 Q1179,44 1185,92Z","M1191,92 Q1196,54 1201,92Z","M1207,92 Q1213,46 1219,92Z",
-  "M1225,92 Q1230,54 1235,92Z","M1241,92 Q1247,44 1253,92Z","M1259,92 Q1264,52 1269,92Z",
-  "M1275,92 Q1281,44 1287,92Z","M1293,92 Q1298,54 1303,92Z","M1309,92 Q1315,46 1321,92Z",
-  "M1327,92 Q1332,54 1337,92Z","M1343,92 Q1349,44 1355,92Z","M1361,92 Q1366,52 1371,92Z",
-  "M1377,92 Q1383,44 1389,92Z","M1395,92 Q1400,54 1405,92Z","M1411,92 Q1417,46 1423,92Z",
+  "M0,92 Q5,52 10,92Z", "M16,92 Q22,44 28,92Z", "M34,92 Q39,56 44,92Z",
+  "M50,92 Q56,46 62,92Z", "M68,92 Q73,54 78,92Z", "M84,92 Q90,44 96,92Z",
+  "M102,92 Q107,54 112,92Z", "M118,92 Q124,46 130,92Z", "M136,92 Q142,52 147,92Z",
+  "M153,92 Q158,44 164,92Z", "M170,92 Q176,54 181,92Z", "M187,92 Q193,46 199,92Z",
+  "M205,92 Q210,54 215,92Z", "M221,92 Q227,44 233,92Z", "M239,92 Q244,54 249,92Z",
+  "M255,92 Q261,46 267,92Z", "M273,92 Q278,54 283,92Z", "M289,92 Q295,44 301,92Z",
+  "M307,92 Q312,54 317,92Z", "M323,92 Q329,46 335,92Z", "M341,92 Q346,52 351,92Z",
+  "M357,92 Q363,44 369,92Z", "M375,92 Q380,54 385,92Z", "M391,92 Q397,46 403,92Z",
+  "M409,92 Q414,54 419,92Z", "M425,92 Q431,44 437,92Z", "M443,92 Q448,54 453,92Z",
+  "M459,92 Q465,46 471,92Z", "M477,92 Q482,52 487,92Z", "M493,92 Q499,44 505,92Z",
+  "M511,92 Q516,54 521,92Z", "M527,92 Q533,46 539,92Z", "M545,92 Q550,54 555,92Z",
+  "M561,92 Q567,44 573,92Z", "M579,92 Q584,54 589,92Z", "M595,92 Q601,46 607,92Z",
+  "M613,92 Q618,52 623,92Z", "M629,92 Q635,44 641,92Z", "M647,92 Q652,54 657,92Z",
+  "M663,92 Q669,46 675,92Z", "M681,92 Q686,54 691,92Z", "M697,92 Q703,44 709,92Z",
+  "M715,92 Q720,54 725,92Z", "M731,92 Q737,46 743,92Z", "M749,92 Q754,52 759,92Z",
+  "M765,92 Q771,44 777,92Z", "M783,92 Q788,54 793,92Z", "M799,92 Q805,46 811,92Z",
+  "M817,92 Q822,54 827,92Z", "M833,92 Q839,44 845,92Z", "M851,92 Q856,54 861,92Z",
+  "M867,92 Q873,46 879,92Z", "M885,92 Q890,52 895,92Z", "M901,92 Q907,44 913,92Z",
+  "M919,92 Q924,54 929,92Z", "M935,92 Q941,46 947,92Z", "M953,92 Q958,54 963,92Z",
+  "M969,92 Q975,44 981,92Z", "M987,92 Q992,54 997,92Z", "M1003,92 Q1009,46 1015,92Z",
+  "M1021,92 Q1026,52 1031,92Z", "M1037,92 Q1043,44 1049,92Z", "M1055,92 Q1060,54 1065,92Z",
+  "M1071,92 Q1077,46 1083,92Z", "M1089,92 Q1094,54 1099,92Z", "M1105,92 Q1111,44 1117,92Z",
+  "M1123,92 Q1128,54 1133,92Z", "M1139,92 Q1145,46 1151,92Z", "M1157,92 Q1162,52 1167,92Z",
+  "M1173,92 Q1179,44 1185,92Z", "M1191,92 Q1196,54 1201,92Z", "M1207,92 Q1213,46 1219,92Z",
+  "M1225,92 Q1230,54 1235,92Z", "M1241,92 Q1247,44 1253,92Z", "M1259,92 Q1264,52 1269,92Z",
+  "M1275,92 Q1281,44 1287,92Z", "M1293,92 Q1298,54 1303,92Z", "M1309,92 Q1315,46 1321,92Z",
+  "M1327,92 Q1332,54 1337,92Z", "M1343,92 Q1349,44 1355,92Z", "M1361,92 Q1366,52 1371,92Z",
+  "M1377,92 Q1383,44 1389,92Z", "M1395,92 Q1400,54 1405,92Z", "M1411,92 Q1417,46 1423,92Z",
   "M1429,92 Q1434,52 1440,92Z"
 ];
 const GRASS_LIGHT = [
-  "M8,92 Q15,38 22,92Z","M58,92 Q65,36 72,92Z","M108,92 Q115,40 122,92Z",
-  "M158,92 Q165,36 172,92Z","M208,92 Q215,40 222,92Z","M258,92 Q265,36 272,92Z",
-  "M308,92 Q315,40 322,92Z","M358,92 Q365,36 372,92Z","M408,92 Q415,40 422,92Z",
-  "M458,92 Q465,36 472,92Z","M508,92 Q515,40 522,92Z","M558,92 Q565,36 572,92Z",
-  "M608,92 Q615,40 622,92Z","M658,92 Q665,36 672,92Z","M708,92 Q715,40 722,92Z",
-  "M758,92 Q765,36 772,92Z","M808,92 Q815,40 822,92Z","M858,92 Q865,36 872,92Z",
-  "M908,92 Q915,40 922,92Z","M958,92 Q965,36 972,92Z","M1008,92 Q1015,40 1022,92Z",
-  "M1058,92 Q1065,36 1072,92Z","M1108,92 Q1115,40 1122,92Z","M1158,92 Q1165,36 1172,92Z",
-  "M1208,92 Q1215,40 1222,92Z","M1258,92 Q1265,36 1272,92Z","M1308,92 Q1315,40 1322,92Z",
-  "M1358,92 Q1365,36 1372,92Z","M1408,92 Q1415,36 1422,92Z"
+  "M8,92 Q15,38 22,92Z", "M58,92 Q65,36 72,92Z", "M108,92 Q115,40 122,92Z",
+  "M158,92 Q165,36 172,92Z", "M208,92 Q215,40 222,92Z", "M258,92 Q265,36 272,92Z",
+  "M308,92 Q315,40 322,92Z", "M358,92 Q365,36 372,92Z", "M408,92 Q415,40 422,92Z",
+  "M458,92 Q465,36 472,92Z", "M508,92 Q515,40 522,92Z", "M558,92 Q565,36 572,92Z",
+  "M608,92 Q615,40 622,92Z", "M658,92 Q665,36 672,92Z", "M708,92 Q715,40 722,92Z",
+  "M758,92 Q765,36 772,92Z", "M808,92 Q815,40 822,92Z", "M858,92 Q865,36 872,92Z",
+  "M908,92 Q915,40 922,92Z", "M958,92 Q965,36 972,92Z", "M1008,92 Q1015,40 1022,92Z",
+  "M1058,92 Q1065,36 1072,92Z", "M1108,92 Q1115,40 1122,92Z", "M1158,92 Q1165,36 1172,92Z",
+  "M1208,92 Q1215,40 1222,92Z", "M1258,92 Q1265,36 1272,92Z", "M1308,92 Q1315,40 1322,92Z",
+  "M1358,92 Q1365,36 1372,92Z", "M1408,92 Q1415,36 1422,92Z"
 ];
 
 const LEAF_PARTICLES = Array.from({ length: 40 }, (_, index) => {
@@ -198,8 +198,8 @@ export default function App() {
 
   // Derive counts from real backend data
   const messageCount = memories.filter(m => m.type === 'message').length;
-  const mediaCount   = memories.filter(m => m.type === 'media').length;
-  const giftCount    = surprises.length;
+  const mediaCount = memories.filter(m => m.type === 'media').length;
+  const giftCount = surprises.length;
 
   useEffect(() => {
     if (loggedIn) {
@@ -218,13 +218,13 @@ export default function App() {
   }, []);
 
   const [overlayOpen, setOverlayOpen] = useState(false);
-  const [userName, setUserName]       = useState('You');
-  const [heroHidden, setHeroHidden]   = useState(false);
-  const [handShow, setHandShow]       = useState(false);
-  const [seedShow, setSeedShow]       = useState(false);
+  const [userName, setUserName] = useState('You');
+  const [heroHidden, setHeroHidden] = useState(false);
+  const [handShow, setHandShow] = useState(false);
+  const [seedShow, setSeedShow] = useState(false);
   const [rippleSplash, setRippleSplash] = useState(false);
-  const [waterShake, setWaterShake]   = useState(false);
-  const [droplets, setDroplets]       = useState([]);
+  const [waterShake, setWaterShake] = useState(false);
+  const [droplets, setDroplets] = useState([]);
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [pendingName, setPendingName] = useState('');
@@ -237,7 +237,7 @@ export default function App() {
   const [messageOccasion, setMessageOccasion] = useState('Specific Date');
   const [messageDate, setMessageDate] = useState('');
   const [writeMessage, setWriteMessage] = useState('');
-  const [mediaFiles, setMediaFiles]   = useState([]);
+  const [mediaFiles, setMediaFiles] = useState([]);
   const [mediaOccasion, setMediaOccasion] = useState('Specific Date');
   const [mediaDate, setMediaDate] = useState('');
   const [giftItems, setGiftItems] = useState([]);
@@ -264,10 +264,10 @@ export default function App() {
   const [customFeatures, setCustomFeatures] = useState({ messages: true, media: false, gifts: false });
   const [customDuration, setCustomDuration] = useState(6);
 
-  const canvasRef    = useRef(null);
-  const nameRef      = useRef(null);
-  const passRef      = useRef(null);
-  const stageRef     = useRef(0);
+  const canvasRef = useRef(null);
+  const nameRef = useRef(null);
+  const passRef = useRef(null);
+  const stageRef = useRef(0);
   const fileInputRef = useRef(null);
 
   useEffect(() => { stageRef.current = plantStage; }, [plantStage]);
@@ -322,16 +322,16 @@ export default function App() {
   }, [stageMessageIndex, plantStage]);
 
   const spawnDroplets = useCallback((many = false) => {
-    const n  = many ? 22 : 14;
+    const n = many ? 22 : 14;
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight * 0.4;
     const newDrops = Array.from({ length: n }, (_, i) => {
       const angle = (Math.random() * 220) - 110;
-      const dist  = 55 + Math.random() * 150;
+      const dist = 55 + Math.random() * 150;
       return {
         id: Date.now() + i,
         left: cx + dist * Math.sin(angle * Math.PI / 180),
-        top:  cy + dist * Math.cos(angle * Math.PI / 180) * 0.22,
+        top: cy + dist * Math.cos(angle * Math.PI / 180) * 0.22,
         delay: Math.random() * 0.38,
       };
     });
@@ -341,9 +341,9 @@ export default function App() {
     }, 1400);
   }, []);
 
-  const openModal  = () => { setOverlayOpen(true); };
+  const openModal = () => { setOverlayOpen(true); };
   const closeModal = () => setOverlayOpen(false);
-  const navTo      = (page) => setCurrentPage(page);
+  const navTo = (page) => setCurrentPage(page);
   const hasSelectedPackage = Boolean(selectedPackage);
 
   const navigateWithPackageGate = (page) => {
@@ -359,14 +359,14 @@ export default function App() {
   const showSavedAndGoHome = (notice, resetFn = null) => {
     // Clear all form data first
     if (resetFn) resetFn();
-    
+
     // Update UI states
     setSaveNotice(notice);
     setHeartboxPrompt('Add another memory');
-    
+
     // Navigate to home immediately - tree animation will trigger via useEffect
     navTo('home');
-    
+
     // Clear notice after 2.6 seconds
     setTimeout(() => setSaveNotice(''), 2600);
   };
@@ -395,7 +395,7 @@ export default function App() {
 
   const saveMessage = async () => {
     if (!validateReceiptAndOccasion({ occasion: messageOccasion, date: messageDate })) return;
-    
+
     const entry = {
       type: 'message',
       title: `Message for ${receiptName}`,
@@ -431,7 +431,7 @@ export default function App() {
 
   const saveMedia = async () => {
     if (!validateReceiptAndOccasion({ occasion: mediaOccasion, date: mediaDate })) return;
-    
+
     const entry = {
       type: 'media',
       title: `Media Vault: ${mediaFiles.length} files`,
@@ -467,15 +467,15 @@ export default function App() {
 
   const saveGiftBooking = async () => {
     if (!legacyCategory) {
-       setSaveNotice('Please select a gift type.');
-       setTimeout(() => setSaveNotice(''), 2600);
-       return;
+      setSaveNotice('Please select a gift type.');
+      setTimeout(() => setSaveNotice(''), 2600);
+      return;
     }
     if (!validateReceiptAndOccasion({ occasion: giftOccasion, date: giftDate, needsAddress: true })) return;
-    
+
     // Friendly names for the admin dashboard
     const categoryNames = { 'flowers': 'Premium Flower Bouquet', 'chocolate': 'Handcrafted Chocolates', 'cakes': 'Celebration Cake' };
-    
+
     const selectedItem = giftItems[0];
     if (!selectedItem) {
       setSaveNotice(`Please select a specific ${legacyCategory} item.`);
@@ -497,7 +497,7 @@ export default function App() {
     };
 
     const result = await addSurprise(giftData);
-    
+
     if (result.success) {
       showSavedAndGoHome(`Surprise scheduled at nearby shops!`, () => {
         setGiftItems([]); setGiftDate(''); setGiftAddress('');
@@ -516,7 +516,7 @@ export default function App() {
     const name = user?.name || user?.ownerName || pendingName || 'Friend';
     setUserName(name);
     setHeroHidden(false);
-    
+
     // Use both the immediate user object and the loaded memories to decide
     const isNewUser = !user?.selectedPackage && memories.length === 0;
 
@@ -550,24 +550,24 @@ export default function App() {
   };
 
   const flowers = [
-    { id: 'rose',      emoji: '🌹', name: 'Red Rose Bouquet',   meaning: 'Eternal love & deep respect' },
-    { id: 'lily',      emoji: '🌸', name: 'Peace Lilies',       meaning: 'Purity, peace & sympathy' },
-    { id: 'sunflower', emoji: '🌻', name: 'Bright Sunflowers',  meaning: 'Warmth, light & longevity' },
-    { id: 'tulip',     emoji: '🌷', name: 'Spring Tulips',      meaning: 'Perfect love & rebirth' },
-    { id: 'lotus',     emoji: '🪷', name: 'Sacred Lotus',      meaning: 'Spiritual growth & strength' },
-    { id: 'daisy',     emoji: '🌼', name: 'Simple Daisies',     meaning: 'Innocence & loyal love' },
+    { id: 'rose', emoji: '🌹', name: 'Red Rose Bouquet', meaning: 'Eternal love & deep respect' },
+    { id: 'lily', emoji: '🌸', name: 'Peace Lilies', meaning: 'Purity, peace & sympathy' },
+    { id: 'sunflower', emoji: '🌻', name: 'Bright Sunflowers', meaning: 'Warmth, light & longevity' },
+    { id: 'tulip', emoji: '🌷', name: 'Spring Tulips', meaning: 'Perfect love & rebirth' },
+    { id: 'lotus', emoji: '🪷', name: 'Sacred Lotus', meaning: 'Spiritual growth & strength' },
+    { id: 'daisy', emoji: '🌼', name: 'Simple Daisies', meaning: 'Innocence & loyal love' },
   ];
   const chocolates = [
-    { id: 'truffle',   emoji: '🍬', name: 'Dark Truffles',      meaning: 'Rich, intense & sophisticated' },
-    { id: 'milk_box',  emoji: '🍫', name: 'Milk Chocolate Box', meaning: 'Classic, sweet & comforting' },
-    { id: 'caramel',   emoji: '🍯', name: 'Salted Caramels',    meaning: 'The perfect balance of life' },
-    { id: 'assorted',  emoji: '🎁', name: 'Luxury Assortment',  meaning: 'A variety of sweet memories' },
+    { id: 'truffle', emoji: '🍬', name: 'Dark Truffles', meaning: 'Rich, intense & sophisticated' },
+    { id: 'milk_box', emoji: '🍫', name: 'Milk Chocolate Box', meaning: 'Classic, sweet & comforting' },
+    { id: 'caramel', emoji: '🍯', name: 'Salted Caramels', meaning: 'The perfect balance of life' },
+    { id: 'assorted', emoji: '🎁', name: 'Luxury Assortment', meaning: 'A variety of sweet memories' },
   ];
   const cakes = [
-    { id: 'velvet',    emoji: '🍰', name: 'Red Velvet',         meaning: 'Elegant, smooth & celebratory' },
-    { id: 'choco_fudge',emoji: '🎂', name: 'Triple Choco Fudge',meaning: 'Decadent, rich & joyful' },
-    { id: 'fruit_tart', emoji: '🥧', name: 'Fresh Fruit Tart',  meaning: 'Light, vibrant & refreshing' },
-    { id: 'vanilla',    emoji: '🧁', name: 'Vanilla Bean',       meaning: 'Pure, classic & timeless' },
+    { id: 'velvet', emoji: '🍰', name: 'Red Velvet', meaning: 'Elegant, smooth & celebratory' },
+    { id: 'choco_fudge', emoji: '🎂', name: 'Triple Choco Fudge', meaning: 'Decadent, rich & joyful' },
+    { id: 'fruit_tart', emoji: '🥧', name: 'Fresh Fruit Tart', meaning: 'Light, vibrant & refreshing' },
+    { id: 'vanilla', emoji: '🧁', name: 'Vanilla Bean', meaning: 'Pure, classic & timeless' },
   ];
   const toggleGiftItem = (item) => setGiftItems(prev =>
     prev.find(x => x.id === item.id) ? prev.filter(x => x.id !== item.id) : [...prev, item]
@@ -631,7 +631,7 @@ export default function App() {
 
   const handleLogout = () => {
     logout();
-    
+
     // ─── Reset Core App State ───
     setPlantStage(0);
     setUserName('You');
@@ -646,23 +646,23 @@ export default function App() {
     setWriteMessage('');
     setMessageOccasion('Specific Date');
     setMessageDate('');
-    
+
     setMediaFiles([]);
     setMediaOccasion('Specific Date');
     setMediaDate('');
-    
+
     setGiftItems([]);
     setSelectedGiftCategory(null);
     setGiftOccasion('Specific Date');
     setGiftDate('');
     setGiftNote('');
-    
+
     setReceiptName('');
     setReceiptEmail('');
     setReceiptPhone('');
     setClosePersonNumber('');
     setGiftAddress('');
-    
+
     // ─── Reset Payment & Package Pipeline ───
     setPendingPackage(null);
     setPaymentCardNumber('');
@@ -671,14 +671,14 @@ export default function App() {
     setPaymentName('');
     setPaymentProcessing(false);
     setPaymentSuccess(false);
-    
+
     setCustomFeatures({ messages: true, media: false, gifts: false });
     setCustomDuration(6);
-    
+
     // ─── Clear Persistent Local Data ───
     localStorage.removeItem(SAVED_STORAGE_KEY);
     setSavedData(createEmptySavedData());
-    
+
     // ─── Clear Tree Canvas (Visual Reset) ───
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext('2d');
@@ -759,7 +759,7 @@ export default function App() {
       if (loggedIn) {
         await updateProfile({ selectedPackage: pendingPackage.id });
       }
-      
+
       setPaymentProcessing(false);
       setPaymentSuccess(true);
       setSelectedPackage(pendingPackage);
@@ -778,12 +778,12 @@ export default function App() {
 
   const renderNavigation = (extraClass = '') => (
     <nav className={extraClass}>
-      <div className="logo" onClick={() => navTo('home')} style={{cursor:'pointer'}}>Still <em>With You</em></div>
+      <div className="logo" onClick={() => navTo('home')} style={{ cursor: 'pointer' }}>Still <em>With You</em></div>
       <ul className="nav-links">
-        <li><a onClick={() => navTo('home')} style={{cursor:'pointer'}}>Home</a></li>
-        <li><a onClick={() => loggedIn ? navTo('heartbox') : openModal('login')} style={{cursor:'pointer'}}>HeartBox</a></li>
-        {loggedIn && <li><a onClick={() => navTo('my-dashboard')} style={{cursor:'pointer'}}>My Dashboard</a></li>}
-        <li><a onClick={() => navTo('about')} style={{cursor:'pointer'}}>About</a></li>
+        <li><a onClick={() => navTo('home')} style={{ cursor: 'pointer' }}>Home</a></li>
+        <li><a onClick={() => loggedIn ? navTo('heartbox') : openModal('login')} style={{ cursor: 'pointer' }}>HeartBox</a></li>
+        {loggedIn && <li><a onClick={() => navTo('my-dashboard')} style={{ cursor: 'pointer' }}>My Dashboard</a></li>}
+        <li><a onClick={() => navTo('about')} style={{ cursor: 'pointer' }}>About</a></li>
       </ul>
       <div className="nav-auth" style={{ display: loggedIn ? 'none' : 'flex' }}>
         <button className="btn-login" onClick={() => openModal('login')}>Log In</button>
@@ -796,7 +796,7 @@ export default function App() {
             <span>{userName}</span>
           </div>
           <button className="btn-logout" onClick={handleLogout} title="Log out">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
             Logout
           </button>
         </div>
@@ -877,7 +877,7 @@ export default function App() {
                       <button className="package-cta-enhanced" onClick={() => navTo('packages')}>
                         <span className="pkg-cta-sparkle">✦</span>
                         <span>Choose Your Plan</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                       </button>
                     ) : (
                       <div className="active-package-badge-enhanced" onClick={() => navTo('packages')}>
@@ -986,18 +986,18 @@ export default function App() {
                     {pkg.popular && <div className="pkg-popular-tag">⭐ Most Popular</div>}
                     <div className="pkg-card-top" style={{ background: pkg.bg }}>
                       <div className="pkg-icon-v2">{pkg.icon}</div>
-                      <div className="pkg-duration-v2" style={{color: pkg.color}}>{pkg.duration}</div>
-                      <h3 className="pkg-name-v2" style={{color: pkg.accent}}>{pkg.name}</h3>
+                      <div className="pkg-duration-v2" style={{ color: pkg.color }}>{pkg.duration}</div>
+                      <h3 className="pkg-name-v2" style={{ color: pkg.accent }}>{pkg.name}</h3>
                     </div>
                     <div className="pkg-card-body">
                       <p className="pkg-desc-v2">{pkg.description}</p>
                       <ul className="pkg-features-v2">
                         {pkg.features.map(f => (
-                          <li key={f}><span className="pkg-check-v2" style={{color: pkg.color}}>✓</span>{f}</li>
+                          <li key={f}><span className="pkg-check-v2" style={{ color: pkg.color }}>✓</span>{f}</li>
                         ))}
                       </ul>
-                      <div className="pkg-price-v2" style={{color: pkg.color}}>{pkg.priceLabel}</div>
-                      <button className="pkg-select-btn-v2" style={{background: `linear-gradient(135deg, ${pkg.color}, ${pkg.accent})`}} onClick={() => handleSelectPackage(pkg)}>
+                      <div className="pkg-price-v2" style={{ color: pkg.color }}>{pkg.priceLabel}</div>
+                      <button className="pkg-select-btn-v2" style={{ background: `linear-gradient(135deg, ${pkg.color}, ${pkg.accent})` }} onClick={() => handleSelectPackage(pkg)}>
                         {selectedPackage?.id === pkg.id ? '✓ Active Plan' : pkg.id === 'custom' ? 'Customize →' : 'Select & Pay →'}
                       </button>
                     </div>
@@ -1077,14 +1077,14 @@ export default function App() {
                     {!customFeatures.messages && !customFeatures.media && !customFeatures.gifts && <span className="cs-empty">Select at least one feature</span>}
                   </div>
                   <span className="cs-duration">Duration: {customDuration} months</span>
-                  <button className="pkg-select-btn-v2" style={{background:'linear-gradient(135deg, #c07820, #7a4e10)', marginTop: '1rem'}} onClick={handleCustomPlanCheckout}>
+                  <button className="pkg-select-btn-v2" style={{ background: 'linear-gradient(135deg, #c07820, #7a4e10)', marginTop: '1rem' }} onClick={handleCustomPlanCheckout}>
                     Proceed to Payment →
                   </button>
                 </div>
               </div>
             </div>
           )}
-          
+
           {currentPage === 'payment' && (
             <div className="page-overlay packages-overlay">
               <div className="page-header">
@@ -1103,14 +1103,14 @@ export default function App() {
                     </div>
                     <h3>Payment Successful!</h3>
                     <p>Your {pendingPackage?.name} is now active. You have unlocked all features of Still With You.</p>
-                    <button className="pkg-select-btn-v2" style={{background: 'linear-gradient(135deg, #1890c0, #0a5080)', marginTop: '2rem', width: 'auto', padding: '1rem 2rem'}} onClick={() => navTo('heartbox')}>
+                    <button className="pkg-select-btn-v2" style={{ background: 'linear-gradient(135deg, #1890c0, #0a5080)', marginTop: '2rem', width: 'auto', padding: '1rem 2rem' }} onClick={() => navTo('heartbox')}>
                       Go to HeartBox →
                     </button>
                   </div>
                 ) : (
-                  <div className="payment-page-inner" style={{maxWidth: '500px', margin: '0 auto', width: '100%'}}>
+                  <div className="payment-page-inner" style={{ maxWidth: '500px', margin: '0 auto', width: '100%' }}>
                     <div className="payment-order-summary">
-                      <div className="pos-icon" style={{background: pendingPackage?.bg}}>{pendingPackage?.icon}</div>
+                      <div className="pos-icon" style={{ background: pendingPackage?.bg }}>{pendingPackage?.icon}</div>
                       <div className="pos-info">
                         <h3>{pendingPackage?.name}</h3>
                         <p>{pendingPackage?.duration || 'Lifetime Access'}</p>
@@ -1121,12 +1121,12 @@ export default function App() {
                     <div className="payment-card-form">
                       <h4>Card Details</h4>
                       <div className="payment-disclaimer">🔒 Secure 256-bit SSL Encrypted Payment</div>
-                      
+
                       <div className="pcf-field">
                         <label>Cardholder Name</label>
                         <input type="text" placeholder="John Doe" value={paymentName} onChange={e => setPaymentName(e.target.value)} />
                       </div>
-                      
+
                       <div className="pcf-field">
                         <label>Card Number</label>
                         <input type="text" placeholder="•••• •••• •••• ••••" value={paymentCardNumber} onChange={e => setPaymentCardNumber(e.target.value)} />
@@ -1143,9 +1143,9 @@ export default function App() {
                         </div>
                       </div>
 
-                      <button 
-                        className={`payment-submit-btn${paymentProcessing ? ' processing' : ''}`} 
-                        onClick={processPayment} 
+                      <button
+                        className={`payment-submit-btn${paymentProcessing ? ' processing' : ''}`}
+                        onClick={processPayment}
                         disabled={paymentProcessing}
                       >
                         {paymentProcessing ? (
@@ -1185,7 +1185,7 @@ export default function App() {
                 <div className="message-card">
                   {renderReceiptSection(false)}
                   {renderOccasionSection(messageOccasion, setMessageOccasion, messageDate, setMessageDate)}
-                  <label className="field-label" style={{marginTop:'1.2rem'}}>Your message</label>
+                  <label className="field-label" style={{ marginTop: '1.2rem' }}>Your message</label>
                   <textarea
                     className="field-textarea"
                     placeholder="Write your heartfelt message here… There are no wrong words."
@@ -1223,7 +1223,7 @@ export default function App() {
                     type="file"
                     multiple
                     accept="image/*,video/*,audio/*"
-                    style={{display:'none'}}
+                    style={{ display: 'none' }}
                     onChange={e => {
                       const files = Array.from(e.target.files || []);
                       setMediaFiles(prev => [
@@ -1247,7 +1247,7 @@ export default function App() {
                     ))}
                   </div>
                 )}
-                <button className="save-btn" style={{marginTop:'1.5rem'}} onClick={saveMedia}>
+                <button className="save-btn" style={{ marginTop: '1.5rem' }} onClick={saveMedia}>
                   💾 Save Media
                 </button>
               </div>
@@ -1276,8 +1276,8 @@ export default function App() {
                     { id: 'chocolate', name: 'Chocolates', icon: '🍫', desc: 'Sweet & Luscious' },
                     { id: 'cakes', name: 'Cakes', icon: '🎂', desc: 'Tasty & Festive' }
                   ].map(cat => (
-                    <button 
-                      key={cat.id} 
+                    <button
+                      key={cat.id}
                       onClick={() => { setLegacyCategory(cat.id); setGiftItems([]); }}
                       style={{
                         background: legacyCategory === cat.id ? '#f0f7ed' : '#fff',
@@ -1303,7 +1303,7 @@ export default function App() {
 
                 {legacyCategory && (
                   <>
-                    <h4 className="section-title" style={{marginTop: '2rem'}}>Step 2: Choose Your {legacyCategory.charAt(0).toUpperCase() + legacyCategory.slice(1)}</h4>
+                    <h4 className="section-title" style={{ marginTop: '2rem' }}>Step 2: Choose Your {legacyCategory.charAt(0).toUpperCase() + legacyCategory.slice(1)}</h4>
                     <div className="gift-item-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
                       {(legacyCategory === 'flowers' ? flowers : legacyCategory === 'chocolate' ? chocolates : cakes).map(item => (
                         <button
@@ -1341,7 +1341,7 @@ export default function App() {
                   value={giftNote}
                   onChange={e => setGiftNote(e.target.value)}
                 />
-                <button className="save-btn" style={{marginTop:'1.2rem'}} onClick={saveGiftBooking}>
+                <button className="save-btn" style={{ marginTop: '1.2rem' }} onClick={saveGiftBooking}>
                   🤝 Confirm Delivery Request
                 </button>
               </div>
@@ -1398,8 +1398,8 @@ export default function App() {
                   <div className={`water-ripple${rippleSplash ? ' splash' : ''}`} key={rippleSplash ? 'splash' : 'idle'} />
                   <div className="grass-bg" />
                   <svg className="grass-svg" viewBox="0 0 1440 92" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="#5db838" opacity=".88">{GRASS_DARK.map((d,i) => <path key={i} d={d} />)}</g>
-                    <g fill="#90de54" opacity=".60">{GRASS_LIGHT.map((d,i) => <path key={i} d={d} />)}</g>
+                    <g fill="#5db838" opacity=".88">{GRASS_DARK.map((d, i) => <path key={i} d={d} />)}</g>
+                    <g fill="#90de54" opacity=".60">{GRASS_LIGHT.map((d, i) => <path key={i} d={d} />)}</g>
                   </svg>
                 </div>
               </div>
@@ -1414,7 +1414,7 @@ export default function App() {
               </button>
 
               <div className="stage-dots">
-                {[0,1,2,3,4,5].map(i => (
+                {[0, 1, 2, 3, 4, 5].map(i => (
                   <div key={i} className={`dot${i < plantStage ? ' filled' : ''}`} />
                 ))}
               </div>

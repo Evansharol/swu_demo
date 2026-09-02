@@ -182,7 +182,7 @@ export default function AdminDashboard({ onLogout }) {
     
     try {
       const [lng, lat] = surprise.deliveryLocation.coordinates;
-      const res  = await fetch(`http://127.0.0.1:5000/api/shops/match?lng=${lng}&lat=${lat}&type=${type}`, {
+      const res  = await fetch(`/api/shops/match?lng=${lng}&lat=${lat}&type=${type}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -226,7 +226,7 @@ export default function AdminDashboard({ onLogout }) {
     }).filter(Boolean);
     
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/shops/broadcast', {
+      const res = await fetch('/api/shops/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 
