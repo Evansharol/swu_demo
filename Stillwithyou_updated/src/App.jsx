@@ -263,6 +263,8 @@ export default function App() {
   // ── Custom plan configurator ──
   const [customFeatures, setCustomFeatures] = useState({ messages: true, media: false, gifts: false });
   const [customDuration, setCustomDuration] = useState(6);
+  // ── Responsive navigation state ──
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const canvasRef = useRef(null);
   const nameRef = useRef(null);
@@ -341,9 +343,9 @@ export default function App() {
     }, 1400);
   }, []);
 
-  const openModal = () => { setOverlayOpen(true); };
+  const openModal = () => { setOverlayOpen(true); setMobileNavOpen(false); };
   const closeModal = () => setOverlayOpen(false);
-  const navTo = (page) => setCurrentPage(page);
+  const navTo = (page) => { setCurrentPage(page); setMobileNavOpen(false); };
   const hasSelectedPackage = Boolean(selectedPackage);
 
   const navigateWithPackageGate = (page) => {
@@ -777,31 +779,165 @@ export default function App() {
   }, [currentUser]);
 
   const renderNavigation = (extraClass = '') => (
-    <nav className={extraClass}>
-      <div className="logo" onClick={() => navTo('home')} style={{ cursor: 'pointer' }}>Still <em>With You</em></div>
-      <ul className="nav-links">
-        <li><a onClick={() => navTo('home')} style={{ cursor: 'pointer' }}>Home</a></li>
-        <li><a onClick={() => loggedIn ? navTo('heartbox') : openModal('login')} style={{ cursor: 'pointer' }}>HeartBox</a></li>
-        {loggedIn && <li><a onClick={() => navTo('my-dashboard')} style={{ cursor: 'pointer' }}>My Dashboard</a></li>}
-        <li><a onClick={() => navTo('about')} style={{ cursor: 'pointer' }}>About</a></li>
-      </ul>
-      <div className="nav-auth" style={{ display: loggedIn ? 'none' : 'flex' }}>
-        <button className="btn-login" onClick={() => openModal('login')}>Log In</button>
-        <button className="btn-signin" onClick={() => openModal('signup')}>Sign Up</button>
-      </div>
-      {loggedIn && (
-        <div className="nav-user-area">
-          <div className="user-badge">
-            <div className="live-dot" />
-            <span>{userName}</span>
+    <>
+      <nav className={`main-nav-bar ${extraClass}`}>
+        <div className="nav-container">
+          <div className="logo" onClick={() => navTo('home')}>
+            <span className="logo-leaf">🍃</span>
+            <span className="logo-text">Still <em>With You</em></span>
           </div>
-          <button className="btn-logout" onClick={handleLogout} title="Log out">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-            Logout
+
+          <ul className="nav-links">
+            <li className={currentPage === 'home' ? 'active' : ''}>
+              <a onClick={() => navTo('home')}>
+                <span>Home</span>
+              </a>
+            </li>
+            <li className={currentPage === 'heartbox' ? 'active' : ''}>
+              <a onClick={() => loggedIn ? navTo('heartbox') : openModal('login')}>
+                <span>HeartBox</span>
+              </a>
+            </li>
+            {loggedIn && (
+              <li className={currentPage === 'my-dashboard' ? 'active' : ''}>
+                <a onClick={() => navTo('my-dashboard')}>
+                  <span>My Dashboard</span>
+                </a>
+              </li>
+            )}
+            <li className={currentPage === 'about' ? 'active' : ''}>
+              <a onClick={() => navTo('about')}>
+                <span>About</span>
+              </a>
+            </li>
+          </ul>
+
+          <div className="nav-actions">
+            {!loggedIn ? (
+              <div className="nav-auth">
+                <button className="btn-login" onClick={() => openModal('login')}>Log In</button>
+                <button className="btn-signin" onClick={() => openModal('signup')}>Get Started</button>
+              </div>
+            ) : (
+              <div className="nav-user-area">
+                <div className="user-badge" onClick={() => navTo('my-dashboard')} title="View Dashboard" style={{ cursor: 'pointer' }}>
+                  <div className="live-dot" />
+                  <span className="user-badge-name">{userName}</span>
+                </div>
+                <button className="btn-logout" onClick={handleLogout} title="Log out">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                  <span className="btn-logout-text">Logout</span>
+                </button>
+              </div>
+            )}
+
+            {/* Mobile Hamburger Button */}
+            <button
+              className={`nav-hamburger ${mobileNavOpen ? 'is-active' : ''}`}
+              onClick={() => setMobileNavOpen(prev => !prev)}
+              aria-label="Toggle navigation menu"
+            >
+              <span className="hamburger-line line-1" />
+              <span className="hamburger-line line-2" />
+              <span className="hamburger-line line-3" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Drawer Backdrop */}
+      <div
+        className={`mobile-nav-backdrop ${mobileNavOpen ? 'show' : ''}`}
+        onClick={() => setMobileNavOpen(false)}
+      />
+
+      {/* Mobile Drawer Menu */}
+      <div className={`mobile-nav-drawer ${mobileNavOpen ? 'open' : ''}`}>
+        <div className="mobile-drawer-header">
+          <div className="logo" onClick={() => navTo('home')}>
+            <span className="logo-leaf">🍃</span>
+            <span className="logo-text">Still <em>With You</em></span>
+          </div>
+          <button
+            className="mobile-drawer-close"
+            onClick={() => setMobileNavOpen(false)}
+            aria-label="Close menu"
+          >
+            ×
           </button>
         </div>
-      )}
-    </nav>
+
+        {loggedIn && (
+          <div className="mobile-user-card" onClick={() => navTo('my-dashboard')}>
+            <div className="live-dot" />
+            <div className="mobile-user-info">
+              <span className="mobile-user-greeting">Signed in as</span>
+              <strong className="mobile-user-name">{userName}</strong>
+            </div>
+            <span className="mobile-user-chevron">›</span>
+          </div>
+        )}
+
+        <ul className="mobile-nav-links">
+          <li className={currentPage === 'home' ? 'active' : ''}>
+            <a onClick={() => navTo('home')}>
+              <span className="mobile-nav-icon">🏡</span>
+              <span className="mobile-nav-text">Home</span>
+              <span className="mobile-nav-arrow">→</span>
+            </a>
+          </li>
+          <li className={currentPage === 'heartbox' ? 'active' : ''}>
+            <a onClick={() => loggedIn ? navTo('heartbox') : openModal('login')}>
+              <span className="mobile-nav-icon">💚</span>
+              <span className="mobile-nav-text">HeartBox</span>
+              <span className="mobile-nav-arrow">→</span>
+            </a>
+          </li>
+          {loggedIn && (
+            <li className={currentPage === 'my-dashboard' ? 'active' : ''}>
+              <a onClick={() => navTo('my-dashboard')}>
+                <span className="mobile-nav-icon">👤</span>
+                <span className="mobile-nav-text">My Dashboard</span>
+                <span className="mobile-nav-arrow">→</span>
+              </a>
+            </li>
+          )}
+          <li className={currentPage === 'about' ? 'active' : ''}>
+            <a onClick={() => navTo('about')}>
+              <span className="mobile-nav-icon">✨</span>
+              <span className="mobile-nav-text">About & Vision</span>
+              <span className="mobile-nav-arrow">→</span>
+            </a>
+          </li>
+        </ul>
+
+        <div className="mobile-drawer-footer">
+          {!loggedIn ? (
+            <div className="mobile-auth-buttons">
+              <button className="btn-signin w-full" onClick={() => openModal('signup')}>
+                Get Started Free
+              </button>
+              <button className="btn-login w-full" onClick={() => openModal('login')}>
+                Log In
+              </button>
+            </div>
+          ) : (
+            <button className="btn-logout-mobile" onClick={handleLogout}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Log Out</span>
+            </button>
+          )}
+        </div>
+      </div>
+    </>
   );
 
   return (
