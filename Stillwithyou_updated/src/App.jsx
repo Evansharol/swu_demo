@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { animateGrow } from './treeEngine';
 import { useAuth } from './context/AuthContext.jsx';
 import { loadModels } from './utils/faceApi';
@@ -189,9 +189,10 @@ const readSavedData = () => {
   }
 };
 
-export default function App() {
+export default function App({ initialPage = 'home' }) {
   const { currentUser, updateProfile, addMemory, addSurprise, memories, surprises, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loggedIn = Boolean(currentUser);
   const [plantStage, setPlantStage] = useState(0);
@@ -225,7 +226,18 @@ export default function App() {
   const [rippleSplash, setRippleSplash] = useState(false);
   const [waterShake, setWaterShake] = useState(false);
   const [droplets, setDroplets] = useState([]);
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (location.pathname === '/user-dashboard') return 'my-dashboard';
+    return initialPage;
+  });
+
+  useEffect(() => {
+    if (location.pathname === '/user-dashboard') {
+      setCurrentPage('my-dashboard');
+    } else if (location.pathname === '/' && currentPage === 'my-dashboard') {
+      setCurrentPage('home');
+    }
+  }, [location.pathname]);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [pendingName, setPendingName] = useState('');
   const [saveNotice, setSaveNotice] = useState('');
@@ -345,7 +357,15 @@ export default function App() {
 
   const openModal = () => { setOverlayOpen(true); setMobileNavOpen(false); };
   const closeModal = () => setOverlayOpen(false);
-  const navTo = (page) => { setCurrentPage(page); setMobileNavOpen(false); };
+  const navTo = (page) => {
+    setCurrentPage(page);
+    setMobileNavOpen(false);
+    if (page === 'home' && location.pathname !== '/') {
+      navigate('/');
+    } else if (page === 'my-dashboard' && location.pathname !== '/user-dashboard') {
+      navigate('/user-dashboard');
+    }
+  };
   const hasSelectedPackage = Boolean(selectedPackage);
 
   const navigateWithPackageGate = (page) => {

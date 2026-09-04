@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { loadModels, getFaceDescriptor, compareFaces, FACE_MATCH_THRESHOLD } from '../utils/faceApi.js';
 
 /**

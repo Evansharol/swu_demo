@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { ProtectedRoute } from './components/ProtectedRoute.jsx'
 import App from './App.jsx'
 import AdminDashboard from './components/AdminDashboard.jsx'
+import ShopDashboard from './components/ShopDashboard.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -12,12 +13,30 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <Routes>
-          {/* User-facing routes — original App handles internal page state */}
+          {/* Public Landing & Tree Route */}
           <Route path="/" element={<App />} />
-          <Route path="/user-dashboard" element={<App />} />
-          <Route path="/shop-dashboard" element={<App />} />
 
-          {/* Admin dashboard — fully protected */}
+          {/* User Dashboard Route */}
+          <Route
+            path="/user-dashboard"
+            element={
+              <ProtectedRoute allowedRole="user">
+                <App initialPage="my-dashboard" />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Shop Partner Dashboard */}
+          <Route
+            path="/shop-dashboard"
+            element={
+              <ProtectedRoute allowedRole="shop">
+                <ShopDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin Dashboard */}
           <Route
             path="/admin-dashboard"
             element={

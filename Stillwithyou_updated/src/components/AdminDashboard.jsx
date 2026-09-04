@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -314,10 +314,9 @@ export default function AdminDashboard({ onLogout }) {
                 ))}
               </div>
 
-              {/* Fixed chart container */}
-              <div style={{ marginTop: '3rem', background: '#fff', borderRadius: '28px', border: '1px solid #f0f0f0', padding: '2rem', boxShadow:'0 4px 24px rgba(0,0,0,0.02)' }}>
-                <h4 style={{ marginBottom: '1.5rem', color: '#1a331a', fontSize:'1.2rem', fontWeight:800 }}>Weekly Engagement</h4>
-                <div style={{ width: '100%', height: '300px' }}>
+              <div className="shop-engagement-card">
+                <h4>Weekly Engagement</h4>
+                <div className="shop-engagement-chart">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={trendData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
