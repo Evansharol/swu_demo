@@ -1,0 +1,37 @@
+# Render Blueprint — Still With You
+# Deploys backend (Node.js/Express) and frontend (React + Nginx) as separate Docker services.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # ─── Backend: Express API ───────────────────────────────────────────────────
+  - type: web
+    name: swu-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/test
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false           # You must set this manually in Render dashboard
+      - key: JWT_SECRET
+        sync: false           # You must set this manually in Render dashboard
+      - key: EMAIL_USER
+        sync: false           # Optional – for reminder emails
+      - key: EMAIL_PASS
+        sync: false           # Optional – for reminder emails
+
+  # ─── Frontend: React SPA served by Nginx ───────────────────────────────────
+  - type: web
+    name: swu-frontend
+    runtime: docker
+    dockerfilePath: ./Stillwithyou_updated/Dockerfile
+    dockerContext: ./Stillwithyou_updated
+    plan: free
+    healthCheckPath: /
+    dockerBuildArgs:
+      - BACKEND_URL=https://swu-backend.onrender.com
