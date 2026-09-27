@@ -22,7 +22,7 @@ FROM nginx:alpine
 RUN apk add --no-cache gettext
 
 # Accept backend URL as build argument (e.g. https://swu-backend.onrender.com)
-ARG BACKEND_URL=http://backend:5000
+ARG BACKEND_URL=https://swu-backend.onrender.com
 ENV BACKEND_URL=${BACKEND_URL}
 
 # Copy custom Nginx configuration template
@@ -35,4 +35,4 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 # Substitute env vars into nginx config at container start, then run nginx
-CMD sh -c "envsubst '\$BACKEND_URL' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD sh -c "export BACKEND_URL=\${BACKEND_URL:-https://swu-backend.onrender.com} && envsubst '\$BACKEND_URL' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
