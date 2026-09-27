@@ -23,6 +23,7 @@ const seedData = async () => {
 
         // Add Mock Users
         const users = [
+            { name: 'Evan Sharol', email: 'evan@gmail.com', password: 'pass123', role: 'user' },
             { name: 'Dr. Alok Sharma', email: 'alok.sharma@health.in', password: 'pass123', role: 'user' },
             { name: 'Priya Mukherjee', email: 'priya05@artstudio.com', password: 'pass123', role: 'user' },
             { name: 'Capt. Vikram Singh', email: 'vikram.navy@mil.gov', password: 'pass123', role: 'user' }
