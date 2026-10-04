@@ -3,6 +3,25 @@ import React, { createContext, useContext, useState, useCallback, useMemo, useEf
 const AuthContext = createContext(null);
 const API_URL = '/api';
 
+// ─── DEMO USERS (used as fallback when backend is offline) ───
+const DEMO_USERS = [
+  {
+    email: 'evan@gmail.com',
+    password: 'pass123',
+    user: { id: 'demo-user-1', name: 'Evan Sharol', email: 'evan@gmail.com', role: 'user', selectedPackage: '3year' }
+  },
+  {
+    email: 'admin@stillwithyou.com',
+    password: 'admin123',
+    user: { id: 'demo-admin-1', name: 'System Admin', email: 'admin@stillwithyou.com', role: 'admin', selectedPackage: null }
+  },
+  {
+    email: 'shop@stillwithyou.com',
+    password: 'shop123',
+    user: { id: 'demo-shop-1', name: 'Floral Aura', email: 'shop@stillwithyou.com', role: 'shop', selectedPackage: null }
+  },
+];
+
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,6 +92,19 @@ export function AuthProvider({ children }) {
         setLoading(false);
         return;
       }
+
+      // ─── DEMO OFFLINE MODE: restore session without hitting server ───
+      if (token === 'demo-token-offline') {
+        const saved = localStorage.getItem('demo_user');
+        if (saved) {
+          try {
+            setCurrentUser(JSON.parse(saved));
+          } catch (_) {}
+        }
+        setLoading(false);
+        return;
+      }
+
       try {
         const res = await fetch(`${API_URL}/auth/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -88,7 +120,12 @@ export function AuthProvider({ children }) {
           window.location.reload();
         }
       } catch (err) {
-        console.error('Failed to load user', err);
+        // Backend offline — try restoring demo session if available
+        console.warn('[Auth] Backend offline on reload, checking demo session...');
+        const saved = localStorage.getItem('demo_user');
+        if (saved) {
+          try { setCurrentUser(JSON.parse(saved)); } catch (_) {}
+        }
       } finally {
         setLoading(false);
       }
@@ -98,11 +135,45 @@ export function AuthProvider({ children }) {
 
   // ─── LOGIN ───
   const login = useCallback(async (email, password, role) => {
+    const emailLower = email ? email.toLowerCase() : '';
+
+    // ─── ALWAYS check demo credentials first (works with or without server) ───
+    const demo = DEMO_USERS.find(
+      d => d.email === emailLower && d.password === password
+    );
+    if (demo) {
+      try {
+        // Try backend first for real data — but don't block on failure
+        const res = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailLower, password, role }),
+          signal: AbortSignal.timeout(3000) // 3s timeout
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('token', data.token);
+          localStorage.removeItem('demo_user');
+          setCurrentUser(data.user);
+          await fetchData(data.user, data.token);
+          return { success: true, user: data.user };
+        }
+      } catch (_) {
+        // Backend offline or timed out — use demo fallback below
+      }
+      // Demo fallback
+      localStorage.setItem('token', 'demo-token-offline');
+      localStorage.setItem('demo_user', JSON.stringify(demo.user));
+      setCurrentUser(demo.user);
+      return { success: true, user: demo.user };
+    }
+
+    // ─── Non-demo user: requires backend ───
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role })
+        body: JSON.stringify({ email: emailLower, password, role })
       });
       const data = await res.json();
       if (!data.success) return { success: false, message: data.message };
@@ -110,10 +181,9 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', data.token);
       setCurrentUser(data.user);
       await fetchData(data.user, data.token);
-
       return { success: true, user: data.user };
     } catch (err) {
-      return { success: false, message: 'Server error. Please try again later.' };
+      return { success: false, message: 'Cannot connect to server. Please try again later.' };
     }
   }, [fetchData]);
 
@@ -139,6 +209,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('demo_user');
     setCurrentUser(null);
     setMemories([]);
     setSurprises([]);
